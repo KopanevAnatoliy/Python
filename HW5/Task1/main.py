@@ -39,7 +39,7 @@ def move_info(game: Game, candies: int) -> None:
     print(f"{'Player_1' if game.turn == 0 else 'Player_2'} take {candies}")
 
 
-def enter_numb(game: Game) -> int:
+def enter_move(game: Game) -> int:
     while True:
         number = input(f'Enter a number between 1 and {game.max_candies}. \n').lower()
         if number == 'help':
@@ -53,18 +53,43 @@ def enter_numb(game: Game) -> int:
             return int(number)
 
 
-def end(game: Game):
+def enter_numb(stop: int, start: int = 1) -> int:
+    while True:
+        number = input(f'Enter a number between {start} and {stop}. \n').lower()
+        if number.isdigit() and int(number) >= start and int(number) <= stop:
+            return int(number)
+
+
+def end(game: Game) -> None:
     print(f"{'Player_1' if game.turn == 0 else 'Player_2'} won")
 
 
+def set_options() -> Game:
+    print("Do you want change options?")
+    if y_n():
+        print("How many candies?")
+        candies = enter_numb(5000, 1)
+        print("How many candies can You take per turn?")
+        max_candies = enter_numb(candies, 1)
+        return Game(candies, max_candies)
+    else:
+        return Game()
+
+
+def set_bot() -> Bot:
+    print('Select difficult.')
+    return Bot(enter_numb(3, 1))
+
+
 while True:
-    game = Game(120)
+    game = set_options()
+    bot = set_bot()
     while game.game_status:
         if not game.turn:
             game_info(game)
-            candies = enter_numb(game)
+            candies = enter_move(game)
         else:
-            candies = Bot.move(game.candies, game.max_candies)
+            candies = bot.move(game.candies, game.max_candies)
         move_info(game, candies)
         game.take_sweets(candies)
 

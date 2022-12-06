@@ -9,7 +9,7 @@ class Game:
         self.__max_candies = max_candies
         self.__game_status = 1
 
-    def take_sweets(self, numb: int):
+    def take_sweets(self, numb: int) -> None:
         if self.__game_status:
             self.__candies -= numb
             self.__change_turn()
@@ -21,7 +21,7 @@ class Game:
         else:
             self.__turn = 0
 
-    def check_game(self):
+    def check_game(self) -> None:
         if self.__candies < 1:
             self.__game_status = 0
             self.__candies = 0
